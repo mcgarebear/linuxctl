@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+apt-get install -y \
+  curl \
+  jq \
+  git \
+  screenfetch \
+  vim \
+  wget
+
+GO_VERSION="1.21.6"
+GO_ARCH="arm64"
+GO_TARGZ="go${GO_VERSION}.linux-${GO_ARCH}.tar.gz"
+curl --location \
+  --output "~/Downloads/${GO_TARGZ}" \
+  "https://go.dev/dl/${GO_TARGZ}"
+rm -rf /usr/local/go || true
+tar -C /usr/local -xzf ${GO_TARGZ}
