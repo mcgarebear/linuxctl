@@ -1,0 +1,8 @@
+[user]
+	name = Brendan McGarry
+	email = 42652567+mcgarebear@users.noreply.github.com
+[core]
+	editor = vim
+	autocrlf = input
+[init]
+	defaultBranch = main
