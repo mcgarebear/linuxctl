@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+#
+# Common shell environment configuration
+
+export PATH="${HOME}/bin:${PATH}"
