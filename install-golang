@@ -6,11 +6,7 @@ GO_TARGZ="go${GO_VERSION}.linux-${GO_ARCH}.tar.gz"
 curl --location \
   --output "~/Downloads/${GO_TARGZ}" \
   "https://go.dev/dl/${GO_TARGZ}"
-rm -rf /usr/local/go || true
-tar -C /usr/local -xzf "${GO_TARGZ}"
+sudo rm -rf /usr/local/go || true
+sudo tar -C /usr/local -xzf "${GO_TARGZ}"
 
-USER=brendan
-HOME=/home/brendan
 mkdir -p "${HOME}/go/{bin,pkg,src}" || true
-chown "${USER}" "${HOME}/go"
-chown "${USER}" "${HOME}/go/{bin,pkg,src}"
