@@ -4,7 +4,9 @@ apt-get install -y \
   curl \
   jq \
   git \
+  htop \
   screenfetch \
+  tree \
   vim \
   wget
 
