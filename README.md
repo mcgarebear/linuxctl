@@ -1,2 +1,3 @@
 # linux
-Common settings for personal linux boxes
+
+Common settings, scripts, and things for my personal linux boxes.
