@@ -59,14 +59,7 @@ autocmd BufWritePost $MYVIMRC :source $MYVIMRC
 " to the directory containing the file which was opened or selected.
 "
 " NOTE: When this option is on some plugins may not work
-" set autochdir
-
-" -----------------------------------------------------------------------------
-" Autocompletion
-" REQUIRES: You complete me plugin
-" -----------------------------------------------------------------------------
-
-let g:ycm_global_ycm_extra_conf = "~/.vim/.ycm_extra_conf.py"
+set autochdir
 
 " -----------------------------------------------------------------------------
 " File Options
