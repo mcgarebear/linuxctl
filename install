@@ -1,11 +1,14 @@
 #!/usr/bin/env bash
 
 sudo apt-get install -y \
+  bc \
   curl \
   jq \
   git \
   htop \
-  screenfetch \
+  neofetch \
+  scrot \
+  tmux \
   tree \
   vim \
   wget
