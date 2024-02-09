@@ -4,5 +4,6 @@
 [core]
 	editor = vim
 	autocrlf = input
+  excludesfile = ~/.gitignore
 [init]
 	defaultBranch = main
