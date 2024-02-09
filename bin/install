@@ -1,4 +1,10 @@
 #!/usr/bin/env bash
+#
+# Installs common development tools
+
+set -o errexit
+set -o nounset
+set -o pipefail
 
 sudo apt-get install -y \
   bc \

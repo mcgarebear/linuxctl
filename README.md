@@ -24,11 +24,18 @@ sudo cp --archive --recursive "${HOME}/code/linux/dotfiles/." "/root/"
 sudo cp --archive --recursive "${HOME}/code/linux/dotfiles/." "/etc/skel/"
 ```
 
-Then load the `.env` file from your shell. For example, in bash append the
-following to your `~/.bashrc`.
+Then load `.env` file from your shell:
 
 ```bash
-echo '[[ -f ~/.env ]] && source ~/.env' >> ~/.bashrc
+source "${HOME}/.env"
+```
+
+To make the prompt environment changes permenent, source the env file in your
+shell configuration.
+
+```bash
+# Example Bash
+echo '[[ -f ~/.env]] && source ~/.env' >> ~/.bashrc
 ```
 
 ### Scripts

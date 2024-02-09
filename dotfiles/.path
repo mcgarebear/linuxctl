@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+# --------------------------------------
+# Path
+# --------------------------------------
+
+# Common
+export PATH="${HOME}/bin:${PATH}"
+
+# Golang
+export PATH="/usr/local/go/bin:${PATH}"
+export PATH="${HOME}/go/bin:${PATH}"

@@ -1,4 +1,10 @@
 #!/usr/bin/env bash
+#
+# Installs docker.
+
+set -o errexit
+set -o nounset
+set -o pipefail
 
 # Add Docker's official GPG key:
 sudo apt-get update

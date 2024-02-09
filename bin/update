@@ -1,4 +1,11 @@
 #!/usr/bin/env bash
+#
+# Performs a package cache update and then installs system/user package
+# upgrades.
+
+set -o errexit
+set -o nounset
+set -o pipefail
 
 sudo apt-get update
 sudo apt-get upgrade -y
