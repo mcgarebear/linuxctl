@@ -97,7 +97,6 @@ if [[ ${EUID} == 0 ]]; then
   USER_PROMPT_CONT="${FG_RED}##${NOCOLOR}>"
 fi
 
-export PROMPT_COMMAND="echo"
 export PS0="\n"
 export PS1="[ time:${FG_GREY}${TIME_24}${NOCOLOR} | history:${FG_GREY}${HISTORY}${NOCOLOR} | command:${FG_GREY}${COMMAND}${NOCOLOR} | user:${USER_COLOR}${USER_NAME}${NOCOLOR} | host:${FG_CYAN}${HOST_SHORT}${NOCOLOR} | pwd:${FG_YELLOW}${PWD_SHORT}${NOCOLOR} | git:${FG_MAGENTA}\$(__git_ps1 '%s' 2>/dev/null || true)${NOCOLOR} ]\n${USER_PROMPT} "
 export PS2="${USER_PROMPT_CONT} "
