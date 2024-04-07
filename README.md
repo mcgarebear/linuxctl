@@ -35,7 +35,7 @@ shell configuration.
 
 ```bash
 # Example Bash
-echo '[[ -f ~/.env]] && source ~/.env' >> ~/.bashrc
+echo '[[ -f ~/.env ]] && source ~/.env' >> ~/.bashrc
 ```
 
 ### Scripts
