@@ -38,7 +38,7 @@ To make the prompt environment changes permenent, add them to your
 `${HOME}/.bashrc`.
 
 ```bash
-cat <<EOF > "${HOME}/.bashrc"
+cat <<EOF >> "${HOME}/.bashrc"
 
 # --------------------------------------
 # mcgarebear/linux.git
