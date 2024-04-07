@@ -11,14 +11,15 @@ vimPackDir="${HOME}/.vim/pack"
 [[ -d "${vimPackDir}" ]] \
   || mkdir --parents "${vimPackDir}"
 
-# Map with keys of strings representing the GitHub short name. Each
-# key has a corresponding tag string as value. Plugins are organized
-# by tags, each will correspond to a subfolder in the package dir.
+# Map with keys of strings representing the GITHUB SHORT NAME. Each
+# key has a corresponding TAG string as value. Plugins are organized
+# by TAGS, each will correspond to a subfolder in the package dir.
 declare -A repos=(
   ["preservim/nerdtree"]="plugins"
 )
 
-# for each entry in the map, perform a git clone to install
+# For each entry in the map, use the GITHUB SHORT NAME to build the clone
+# URL. Use TAG and GITHUB SHORT NAME to construct plugin destination path.
 for repo in ${!repos[@]}; do
   githubURL="git@github.com:${repo}.git"
   repoName=$( \
@@ -31,6 +32,7 @@ for repo in ${!repos[@]}; do
   )
   tag=${repos[$repo]}
   repoDestination="${vimPackDir}/${tag}/start/${repoName}"
+
   [[ -d "${repoDestination}" ]] \
     || git clone "${githubURL}" "${repoDestination}"
 done
