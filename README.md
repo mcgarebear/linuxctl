@@ -49,6 +49,8 @@ export PATH="${HOME}/code/linux/bin:${PATH}"
 EOF
 ```
 
-Should look something like this when done. Hello, world.
+Should look something like this when done.
 
 ![Linux](linux.png "Terminal")
+
+Hello, world.
