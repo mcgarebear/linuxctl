@@ -48,3 +48,5 @@ export PATH="${HOME}/code/linux/bin:${PATH}"
 
 EOF
 ```
+
+![Linux](linux.png "Ready to Rage")
