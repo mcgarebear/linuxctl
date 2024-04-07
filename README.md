@@ -48,11 +48,3 @@ export PATH="${HOME}/code/linux/bin:${PATH}"
 
 EOF
 ```
-
-### Scripts
-
-Create a symbolic link. `dotfile/.env` appends `~/bin` to your `${PATH}`.
-
-```bash
-ln --symbolic "${HOME}/code/linux/bin" "${HOME}/bin"
-```
