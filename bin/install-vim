@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+#
+# Installs vim plugins using vim 8 packages
+
+set -o errexit
+set -o nounset
+set -o pipefail
+
+# Create the vim package directory if it does not already exist
+vimPackDir="${HOME}/.vim/pack"
+[[ -d "${vimPackDir}" ]] \
+  || mkdir --parents "${vimPackDir}"
+
+# Map with keys of strings representing the GitHub short name. Each
+# key has a corresponding tag string as value. Plugins are organized
+# by tags, each will correspond to a subfolder in the package dir.
+declare -A repos=(
+  ["preservim/nerdtree"]="plugins"
+)
+
+# for each entry in the map, perform a git clone to install
+for repo in ${!repos[@]}; do
+  githubURL="git@github.com:${repo}.git"
+  repoName=$( \
+    sed "s/.*\///g" \
+      <<< "${repo}" \
+  )
+  repoName=$(
+    sed "s/\.git//g" \
+      <<< "${repoName}" \
+  )
+  tag=${repos[$repo]}
+  repoDestination="${vimPackDir}/${tag}/start/${repoName}"
+  [[ -d "${repoDestination}" ]] \
+    || git clone "${githubURL}" "${repoDestination}"
+done
