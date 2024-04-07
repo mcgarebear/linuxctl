@@ -4,9 +4,17 @@
 # Path
 # --------------------------------------
 
-# Common
+# personal bin directory to hold executables. this is typically bash.
 export PATH="${HOME}/bin:${PATH}"
 
 # Golang
+#
+# Root workspace for all Golang projects.
+export GOPATH="${HOME}/go"
+# Where to place `go install` binaries.
+export GOBIN="${GOPATH}/bin"
+# Location of Golang install.
+export GOROOT="/usr/local/go"
+# Add `go install` binaries as well as the go install itself.
 export PATH="/usr/local/go/bin:${PATH}"
-export PATH="${HOME}/go/bin:${PATH}"
+export PATH="${GOBIN}:${PATH}"

@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+#
+# Copies dotfiles
+
+set -o errexit
+set -o nounset
+set -o pipefail
+
+DIRS=(
+  # personal user
+  "${HOME}/"
+  # root user
+  "/root/"
+  # new users
+  "/etc/skel"
+)
+
+# For each directory, copy the dotfiles into this destination
+for DIR in "${DIRS[@]}"; do
+cp --archive \
+  --recursive \
+  "${HOME}/code/linux/dotfiles/." \
+  "${DIR}"
+done
+
+# .env is the entrypoint for shell customization.
+source "${HOME}/.env"

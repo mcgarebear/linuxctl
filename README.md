@@ -1,7 +1,15 @@
 # linux
 
-Common settings, scripts, and things for my personal linux boxes.
+This repository came about by setting up a
+[raspberry pi 5](https://www.raspberrypi.com/products/raspberry-pi-5/)
+running
+[Ubuntu 23.10](https://ubuntu.com/download/desktop)
+for use as a local development environment.
 
+Imagine getting your hands on a new linux computer. What are you going to use
+it for? Probably developing software. This repository is meant to quickly
+bootstrap a development environment. Especially since my cheap SD cards tend
+to die.
 
 ## Install
 
@@ -12,30 +20,33 @@ mkdir --parents "${HOME}/code"
 git clone git@github.com/mcgarebear/linux.git "${HOME}/code/linux"
 ```
 
-### Dotfiles
-
-Place the desired dotfiles into the home directory. To get prompt customization
-working with user `root` (or when using `sudo`), copy to `root`'s home. You
-can have these files in new user's `${HOME}` by copying to `/etc/skel`.
+Add the `/bin` directory of the repository to your `$PATH` to use the
+executable scripts.  For a fresh install, you will likely want to run these
+scripts.
 
 ```bash
-cp --archive --recursive "${HOME}/code/linux/dotfiles/." "${HOME}/"
-sudo cp --archive --recursive "${HOME}/code/linux/dotfiles/." "/root/"
-sudo cp --archive --recursive "${HOME}/code/linux/dotfiles/." "/etc/skel/"
+export PATH="${HOME}/code/linux/bin:${PATH}"
+
+install-dotfiles
+
+update-sys-packages
+install-dev-packages
+update-dev-packages
 ```
 
-Then load `.env` file from your shell:
+To make the prompt environment changes permenent, add them to your
+`${HOME}/.bashrc`.
 
 ```bash
-source "${HOME}/.env"
-```
+cat <<EOF > "${HOME}/.bashrc"
 
-To make the prompt environment changes permenent, source the env file in your
-shell configuration.
+# --------------------------------------
+# mcgarebear/linux.git
+# --------------------------------------
+export PATH="${HOME}/code/linux/bin:${PATH}"
+# --------------------------------------
 
-```bash
-# Example Bash
-echo '[[ -f ~/.env ]] && source ~/.env' >> ~/.bashrc
+EOF
 ```
 
 ### Scripts

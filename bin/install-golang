@@ -6,16 +6,38 @@ set -o errexit
 set -o nounset
 set -o pipefail
 
-mkdir -p "${HOME}/go/{bin,pkg,src}" || true
+# Setup root workspace
+# 
+# bin: executables
+# pkg: compiled packages
+# src: source code
+DIRS=(
+  "${GOPATH}"
+  "${GOBIN}"
+  "${GOPATH}/src"
+  "${GOPATH}/pkg"
+)
+for DIR in "${DIRS[@]}"; do
+  [[ -d "${DIR}" ]] \
+    || mkdir -p "${DIR}"
+done
 
+# Retrieve the version of go to install from their
+# site
 GO_VERSION="1.22.2"
 GO_ARCH="arm64"
 GO_TARGZ="go${GO_VERSION}.linux-${GO_ARCH}.tar.gz"
-OUT="${HOME}/Downloads/${GO_TARGZ}"
-[[ -f "${OUT}" ]] || \
+GO_INSTALL="${HOME}/Downloads/${GO_TARGZ}"
+
+# Download the install files if it doesn't already exist
+[[ -f "${GO_INSTALL}" ]] || \
   curl --location \
-  --output "${OUT}" \
+  --output "${GO_INSTALL}" \
   "https://go.dev/dl/${GO_TARGZ}"
 
-[[ -d /usr/local/go ]] && sudo rm -rf /usr/local/go
-sudo tar -C /usr/local -xzf "${OUT}"
+# Remove the current install and unpack the install 
+# into GOROOT
+[[ -d "${GOROOT}" ]] && sudo rm -rf "${GOROOT}"
+sudo tar -C /usr/local -xzf "${GO_INSTALL}"
+
+${GOROOT}/go version
