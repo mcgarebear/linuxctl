@@ -16,6 +16,8 @@ vimPackDir="${HOME}/.vim/pack"
 # by TAGS, each will correspond to a subfolder in the package dir.
 declare -A repos=(
   ["preservim/nerdtree"]="plugins"
+  ["fatih/vim-go"]="plugins"
+  ["jvirtanen/vim-hcl"]="syntax"
 )
 
 # For each entry in the map, use the GITHUB SHORT NAME to build the clone
@@ -25,10 +27,6 @@ for repo in ${!repos[@]}; do
   repoName=$( \
     sed "s/.*\///g" \
       <<< "${repo}" \
-  )
-  repoName=$(
-    sed "s/\.git//g" \
-      <<< "${repoName}" \
   )
   tag=${repos[$repo]}
   repoDestination="${vimPackDir}/${tag}/start/${repoName}"
