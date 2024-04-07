@@ -60,6 +60,12 @@ autocmd BufWritePost $MYVIMRC :source $MYVIMRC
 "
 " NOTE: When this option is on some plugins may not work
 set autochdir
+" Omni completion provides smart autocompletion for programs. When invoked,
+" the text before the cursor is inspected to guess what might follow. A popup
+" menu offers word completion choices that may include struct and class
+" members, system functions, and more. A similar feature in Microsoft Visual
+" Studio is known as IntelliSense.
+set omnifunc=syntaxcomplete#Complete
 
 " -----------------------------------------------------------------------------
 " File Options
