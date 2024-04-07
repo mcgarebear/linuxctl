@@ -15,8 +15,9 @@ vimPackDir="${HOME}/.vim/pack"
 # key has a corresponding TAG string as value. Plugins are organized
 # by TAGS, each will correspond to a subfolder in the package dir.
 declare -A repos=(
-  ["preservim/nerdtree"]="plugins"
   ["fatih/vim-go"]="plugins"
+  ["tc50cal/vim-terminal"]="plugins"
+  ["preservim/nerdtree"]="plugins"
   ["jvirtanen/vim-hcl"]="syntax"
 )
 
