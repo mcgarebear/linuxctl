@@ -44,6 +44,7 @@ cat <<EOF >> "${HOME}/.bashrc"
 # mcgarebear/linux.git
 # --------------------------------------
 export PATH="${HOME}/code/linux/bin:${PATH}"
+[[ -f "${HOME}/.env" ]] && source "${HOME}/.env"
 # --------------------------------------
 
 EOF
