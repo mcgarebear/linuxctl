@@ -13,11 +13,12 @@ to die.
 
 ## Install
 
-Clone the repository somewhere, I put things in `~/code`.
+Clone the repository somewhere, I put things in `~/code` organized by
+VCS and slug.
 
 ```bash
-mkdir --parents "${HOME}/code"
-git clone git@github.com/mcgarebear/linux.git "${HOME}/code/linux"
+mkdir --parents "${HOME}/code/github.com/mcgarebear"
+git clone git@github.com/mcgarebear/linux.git "${HOME}/code/github.com/mcgarebear/linux"
 ```
 
 Add the `/bin` directory of the repository to your `$PATH` to use the
@@ -25,7 +26,7 @@ executable scripts.  For a fresh install, you will likely want to run these
 scripts.
 
 ```bash
-export PATH="${HOME}/code/linux/bin:${PATH}"
+export PATH="${HOME}/code/github.com/mcgarebear/linux/bin:${PATH}"
 
 install-dotfiles
 
@@ -43,7 +44,7 @@ cat <<EOF >> "${HOME}/.bashrc"
 # --------------------------------------
 # mcgarebear/linux.git
 # --------------------------------------
-export PATH="${HOME}/code/linux/bin:${PATH}"
+export PATH="${HOME}/code/github.com/mcgarebear/linux/bin:${PATH}"
 [[ -f "${HOME}/.env" ]] && source "${HOME}/.env"
 # --------------------------------------
 
@@ -53,5 +54,3 @@ EOF
 Should look something like this when done.
 
 ![Linux](linux.png "Terminal")
-
-Hello, world.
