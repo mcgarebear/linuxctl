@@ -19,6 +19,8 @@ declare -A repos=(
   ["tc50cal/vim-terminal"]="plugins"
   ["preservim/nerdtree"]="plugins"
   ["jvirtanen/vim-hcl"]="syntax"
+  ["jiangmiao/auto-pairs"]="plugins"
+  ["preservim/nerdcommenter"]="plugins"
 )
 
 # For each entry in the map, use the GITHUB SHORT NAME to build the clone
