@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+#
+# Installs the Google Cloud Platform (GCP) command line interface.
+
+set -o errexit
+set -o nounset
+set -o pipefail
+
+sudo snap install google-cloud-cli --classic
