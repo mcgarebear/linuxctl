@@ -9,7 +9,7 @@ set -o pipefail
 TMP="$(mktemp --directory)"
 
 curl -o "${TMP}/awscliv2.zip" \
-  "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" 
+  "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip"
 
 unzip "${TMP}/awscliv2.zip" -d "${TMP}"
 
