@@ -24,10 +24,12 @@ done
 
 # Retrieve the version of go to install from their
 # site
+
 GO_VERSION="1.22.2"
 GO_ARCH="arm64"
 GO_TARGZ="go${GO_VERSION}.linux-${GO_ARCH}.tar.gz"
-GO_INSTALL="${HOME}/Downloads/${GO_TARGZ}"
+TMP="$(mktemp --directory)"
+GO_INSTALL="${TMP}/${GO_TARGZ}"
 
 # Download the install files if it doesn't already exist
 [[ -f "${GO_INSTALL}" ]] || \
@@ -39,5 +41,4 @@ GO_INSTALL="${HOME}/Downloads/${GO_TARGZ}"
 # into GOROOT
 [[ -d "${GOROOT}" ]] && sudo rm -rf "${GOROOT}"
 sudo tar -C /usr/local -xzf "${GO_INSTALL}"
-
-${GOROOT}/go version
+rm -rf "${TMP}"

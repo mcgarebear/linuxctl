@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+#
+# Installs the Amazon Web Services (AWS) command line interface.
+
+set -o errexit
+set -o nounset
+set -o pipefail
+
+TMP="$(mktemp --directory)"
+
+curl -o "${TMP}/awscliv2.zip" \
+  "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" 
+
+unzip "${TMP}/awscliv2.zip" -d "${TMP}"
+
+sudo "${TMP}/aws/install" \
+  --install-dir '/usr/local/aws-cli' \
+  --bin-dir '/usr/local/bin' \
+  --update
+
+rm -rf "${TMP}"

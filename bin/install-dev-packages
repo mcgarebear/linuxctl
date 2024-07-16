@@ -16,6 +16,7 @@ sudo apt-get install -y \
   scrot \
   tmux \
   tree \
+  unzip \
   vim \
   wget
 

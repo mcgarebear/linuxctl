@@ -6,5 +6,7 @@ set -o errexit
 set -o nounset
 set -o pipefail
 
-curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs \
+curl --proto '=https' \
+  --tlsv1.2 \
+  -sSf https://sh.rustup.rs \
   | sh
