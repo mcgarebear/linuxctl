@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+#
+# Installs kubectl for interaction with Kubernetes.
+
+set -o errexit
+set -o nounset
+set -o pipefail
+
+TMP="$(mktemp --directory)"
+
+LATEST="$(curl -L -s https://dl.k8s.io/release/stable.txt)"
+curl -L \
+  -o "${TMP}/kubectl" \
+  "https://dl.k8s.io/release/${LATEST}/bin/linux/amd64/kubectl"
+
+sudo install \
+  -o root \
+  -g root \
+  -m 0755 \
+  "${TMP}/kubectl" \
+  /usr/local/bin/kubectl
+
+rm -rf "${TMP}"
