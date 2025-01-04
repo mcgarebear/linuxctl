@@ -19,7 +19,7 @@ DIRS=(
 for DIR in "${DIRS[@]}"; do
 cp --archive \
   --recursive \
-  "${HOME}/code/linux/dotfiles/." \
+  "${HOME}/code/github.com/mcgarebear/linux/dotfiles/." \
   "${DIR}"
 done
 
