@@ -29,10 +29,10 @@ scripts.
 export PATH="${HOME}/code/github.com/mcgarebear/linux/bin:${PATH}"
 
 install-dotfiles
-
-update-sys-packages
 install-dev-packages
+
 update-dev-packages
+update-sys-packages
 ```
 
 To make the prompt environment changes permenent, add them to your
