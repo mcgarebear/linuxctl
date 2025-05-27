@@ -10,9 +10,9 @@ DIRS=(
   # personal user
   "${HOME}/"
   # root user
-  "/root/"
+  #"/root/"
   # new users
-  "/etc/skel"
+  #"/etc/skel"
 )
 
 # For each directory, copy the dotfiles into this destination

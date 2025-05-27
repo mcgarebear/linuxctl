@@ -88,15 +88,15 @@ BG_LIGHT_CYAN="${ESC}[106m"
 
 # Shell Prompt
 
-USER_COLOR=${FG_GREEN}
-USER_PROMPT="${FG_GREEN}?${NOCOLOR}>"
-USER_PROMPT_CONT="${FG_GREEN}??${NOCOLOR}>"
+USER_COLOR="\[${FG_GREEN}\]"
+USER_PROMPT="\[${FG_GREEN}\]?\[${NOCOLOR}\]>"
+USER_PROMPT_CONT="\[${FG_GREEN}\]??\[${NOCOLOR}\]>"
 if [[ ${EUID} == 0 ]]; then
-  USER_COLOR=${FG_RED}
-  USER_PROMPT="${FG_RED}#${NOCOLOR}>"
-  USER_PROMPT_CONT="${FG_RED}##${NOCOLOR}>"
+  USER_COLOR="\[${FG_RED}\]"
+  USER_PROMPT="\[${FG_RED}\]#\[${NOCOLOR}\]>"
+  USER_PROMPT_CONT="\[${FG_RED}\]##\[${NOCOLOR}\]>"
 fi
 
 export PS0="\n"
-export PS1="[ time:${FG_GREY}${TIME_24}${NOCOLOR} | history:${FG_GREY}${HISTORY}${NOCOLOR} | command:${FG_GREY}${COMMAND}${NOCOLOR} | user:${USER_COLOR}${USER_NAME}${NOCOLOR} | host:${FG_CYAN}${HOST_SHORT}${NOCOLOR} | pwd:${FG_YELLOW}${PWD_SHORT}${NOCOLOR} | git:${FG_MAGENTA}\$(__git_ps1 '%s' 2>/dev/null || true)${NOCOLOR} ]\n${USER_PROMPT} "
+export PS1="[ time:\[${FG_GREY}\]${TIME_24}\[${NOCOLOR}\] | history:\[${FG_GREY}\]${HISTORY}\[${NOCOLOR}\] | command:\[${FG_GREY}\]${COMMAND}\[${NOCOLOR}\] | user:\[${USER_COLOR}\]${USER_NAME}\[${NOCOLOR}\] | host:\[${FG_CYAN}\]${HOST_SHORT}\[${NOCOLOR}\] | pwd:\[${FG_YELLOW}\]${PWD_SHORT}\[${NOCOLOR}\] | git:\[${FG_MAGENTA}\]\$(__git_ps1 '%s' 2>/dev/null || true)\[${NOCOLOR}\] ]\n${USER_PROMPT} "
 export PS2="${USER_PROMPT_CONT} "
