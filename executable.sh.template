@@ -1,0 +1,96 @@
+#!/usr/bin/env bash
+#
+# TODO: Synopsis
+
+set -o errexit
+set -o nounset
+set -o pipefail
+
+# help writes usage information to the console.
+help () {
+  local -r executable=${1}
+  cat << EOF
+${executable} [flag..] [option [value]] subcommand
+
+SYNOPSIS:
+  N/A"
+
+FLAGS:
+ --flag
+   Defaults to \`false\`.
+-h, --help
+    Display usage and exit.
+
+OPTIONS:"
+  --option
+    Defaults to \`value\`.
+
+SUBCOMMANDS:
+  N/A
+
+ENVIRONMENT:
+  N/A
+
+FILES:
+  N/A
+
+FILES:
+  N/A:
+EOF
+}
+
+# main is the entry point of the script. It returns zero upon successful
+# execution. If an error was encountered during execution, it returns non-zero.
+main () {
+  local -r __file_path=$(realpath $0)
+  local -r __file_name=$(basename "${__file_path}")
+  local -r __file_dir=$(dirname "${__file_path}")
+  local -r __timestamp=$(date +"%Y%m%d-%H%M%S")
+
+  cat << EOF
+__file_path: ${__file_path}
+__file_name: ${__file_name}
+__file_dir: ${__file_dir}
+__timestamp: ${__timestamp}
+EOF
+
+  local flag=0
+  local option=''
+  local subcommand=''
+
+  while test $# -gt 0; do
+    case "$1" in
+      -h | --help)
+        help "${__file_name}"
+        return 0
+        ;;
+      --flag)
+        flag=1
+        shift
+        ;;
+      --option)
+        option="$2"
+        shift 2
+        ;;
+      *)
+        subcommand="$1"
+        shift 1
+        break
+        ;;
+    esac
+  done
+
+  cat << EOF
+----------------------------------------
+Parameter Dump:
+----------------------------------------
+flag: ${flag}
+option: ${option}
+subcommand: ${subcommand}
+----------------------------------------
+EOF
+
+  return 0
+}
+
+main $@
