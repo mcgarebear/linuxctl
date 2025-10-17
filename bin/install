@@ -1,0 +1,185 @@
+#!/usr/bin/env bash
+
+set -o errexit
+set -o nounset
+set -o pipefail
+
+# help writes usage information to the console.
+help () {
+  local -r executable=${1}
+  cat << EOF
+${executable} [flag..]
+
+SYNOPSIS:
+  ${executable} downloads and installs artifacts such as packages,
+  configuration files, etc to bootstrap the system.
+
+
+FLAGS:
+-h, --help
+    Display usage and exit.
+EOF
+}
+
+# -------------------------------------
+# Cloud Providers
+# -------------------------------------
+
+install_aws () {
+  TMP="$(mktemp --directory)"
+  curl -o "${TMP}/awscliv2.zip" \
+    "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip"
+  unzip "${TMP}/awscliv2.zip" -d "${TMP}"
+  sudo "${TMP}/aws/install" \
+    --install-dir '/usr/local/aws-cli' \
+    --bin-dir '/usr/local/bin' \
+    --update
+  rm -rf "${TMP}"
+  return 0
+}
+
+install_azure () {
+  curl -sL 'https://aka.ms/InstallAzureCLIDeb' \
+    | sudo bash
+  return 0
+}
+
+install_gcloud () {
+  sudo snap install google-cloud-cli --classic
+  return 0
+}
+
+# -------------------------------------
+# Developer Tools
+# -------------------------------------
+
+install_docker () {
+  sudo apt-get install -y ca-certificates curl
+  sudo install -m 0755 -d /etc/apt/keyrings
+  sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+  sudo chmod a+r /etc/apt/keyrings/docker.asc
+
+  # Add the repository to Apt sources:
+  echo \
+    "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
+    $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
+    sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+  sudo apt-get update
+
+  # Install packages
+  sudo apt-get install -y \
+    docker-ce \
+    docker-ce-cli \
+    containerd.io \
+    docker-buildx-plugin \
+    docker-compose-plugin
+  return 0
+}
+
+install_golang () {
+  # Setup root workspace
+  #
+  # bin: executables
+  # pkg: compiled packages
+  # src: source code
+  DIRS=(
+    "${GOPATH}"
+    "${GOBIN}"
+    "${GOPATH}/src"
+    "${GOPATH}/pkg"
+  )
+  for DIR in "${DIRS[@]}"; do
+    [[ -d "${DIR}" ]] \
+      || mkdir -p "${DIR}"
+  done
+
+  # Retrieve the version of go to install from their
+  # site
+  GO_VERSION="1.22.2"
+  GO_ARCH="arm64"
+  GO_TARGZ="go${GO_VERSION}.linux-${GO_ARCH}.tar.gz"
+  TMP="$(mktemp --directory)"
+  GO_INSTALL="${TMP}/${GO_TARGZ}"
+
+  # Download the install files if it doesn't already exist
+  [[ -f "${GO_INSTALL}" ]] || \
+    curl --location \
+    --output "${GO_INSTALL}" \
+    "https://go.dev/dl/${GO_TARGZ}"
+
+  # Remove the current install and unpack the install
+  # into GOROOT
+  [[ -d "${GOROOT}" ]] && sudo rm -rf "${GOROOT}"
+  sudo tar -C /usr/local -xzf "${GO_INSTALL}"
+  rm -rf "${TMP}"
+  return 0
+}
+
+install_kubernetes () {
+  TMP="$(mktemp --directory)"
+  curl --silent \
+    --show-error \
+    --location \
+    --fail \
+    -o "${TMP}/helm" \
+    "https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3"
+  chmod 700 \
+    "${TMP}/helm"
+  exec "${TMP}/helm"
+  rm -rf "${TMP}"
+
+  TMP="$(mktemp --directory)"
+  LATEST="$(curl -L -s https://dl.k8s.io/release/stable.txt)"
+  curl -L \
+    -o "${TMP}/kubectl" \
+    "https://dl.k8s.io/release/${LATEST}/bin/linux/amd64/kubectl"
+  sudo install \
+    -o root \
+    -g root \
+    -m 0755 \
+    "${TMP}/kubectl" \
+    /usr/local/bin/kubectl
+  rm -rf "${TMP}"
+
+  return 0
+}
+
+install_python () {
+  sudo apt-get install -y python3 python3-pip
+  return 0
+}
+
+install_rust () {
+  curl --proto '=https' \
+    --tlsv1.2 \
+    -sSf https://sh.rustup.rs \
+  | sh
+  return 0
+}
+
+# -------------------------------------
+
+# main is the entry point of the script. It returns zero upon successful
+# execution. If an error was encountered during execution, it returns non-zero.
+main () {
+  local -r __file_path=$(realpath $0)
+  local -r __file_name=$(basename "${__file_path}")
+  local -r __file_dir=$(dirname "${__file_path}")
+  local -r __timestamp=$(date +"%Y%m%d-%H%M%S")
+
+  while test $# -gt 0; do
+    case "$1" in
+      -h | --help)
+        help "${__file_name}"
+        return 0
+        ;;
+      *)
+        break
+        ;;
+    esac
+  done
+
+  return 0
+}
+
+main $@
