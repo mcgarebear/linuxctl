@@ -1,20 +1,98 @@
 #!/usr/bin/env bash
 
-# --------------------------------------
-# Path
-# --------------------------------------
+ESC=$(printf "\e")
 
-# personal bin directory to hold executables. this is typically bash.
-export PATH="${HOME}/bin:${PATH}"
+# Text Formatting
+BLINK="${ESC}[5m"
+BOLD="${ESC}[1m"
+DIM="${ESC}[2m"
+REVERSE="${ESC}[7m"
+ITALICS_ON="${ESC}[3m"
+ITALICS_OFF="${ESC}[23m"
+HIGHLIGHT_ON="${ESC}[7m"
+HIGHLIGHT_OFF="${ESC}[27m"
+UNDERLINE_ON="${ESC}[4"
+UNDERLINE_OFF="${ESC}[24"
 
-# Golang
-#
-# Root workspace for all Golang projects.
-export GOPATH="${HOME}/go"
-# Where to place `go install` binaries.
-export GOBIN="${GOPATH}/bin"
-# Location of Golang install.
-export GOROOT="/usr/local/go"
-# Add `go install` binaries as well as the go install itself.
-export PATH="/usr/local/go/bin:${PATH}"
-export PATH="${GOBIN}:${PATH}"
+# Cursor Movement
+SAVE="${ESC}7"
+RESTORE="${ESC}8"
+CLEAR="${ESC}2J"
+RESET="${ESC}[H"
+CLEAR_BOS="${ESC}E[J"
+CLEAR_EOL="${ESC}[K"
+CLEAR_BOL="${ESC}[1K"
+
+# Bash
+BELL="\a"
+DATE="\d"
+HOST_SHORT="\h"
+HOST_LONG="\H"
+JOBS="\j"
+DEVICE_NAME="\l"
+SHELL_NAME="\s"
+TIME_24="\t"
+TIME_12="\T"
+TIME_12AMPM="\@"
+TIME_24AMPM="\A"
+USER_NAME="\u"
+VERSION="\v"
+RELEASE="\V"
+PWD_SHORT="\w"
+PWD_LONG="\W"
+HISTORY="\!"
+COMMAND="\#"
+PROMPT="\$"
+
+# ANSI Colors
+
+NOCOLOR="${ESC}[0m"
+
+FG_BLACK="${ESC}[30m"
+FG_RED="${ESC}[31m"
+FG_GREEN="${ESC}[32m"
+FG_YELLOW="${ESC}[33m"
+FG_BLUE="${ESC}[35m"
+FG_MAGENTA="${ESC}[35m"
+FG_CYAN="${ESC}[36m"
+FG_GREY="${ESC}[90m"
+FG_WHITE="${ESC}[97m"
+
+FG_LIGHT_GREY="${ESC}[37m"
+FG_LIGHT_RED="${ESC}[91m"
+FG_LIGHT_GREEN="${ESC}[92m"
+FG_LIGHT_YELLOW="${ESC}[93m"
+FG_LIGHT_MAGENTA="${ESC}[95m"
+FG_LIGHT_CYAN="${ESC}[96m"
+
+BG_BLACK="${ESC}[40m"
+BG_RED="${ESC}[41m"
+BG_GREEN="${ESC}[42m"
+BG_YELLOW="${ESC}[43m"
+BG_BLUE="${ESC}[45m"
+BG_MAGENTA="${ESC}[45m"
+BG_CYAN="${ESC}[46m"
+BG_GREY="${ESC}[100m"
+BG_WHITE="${ESC}[107m"
+
+BG_LIGHT_GREY="${ESC}[47m"
+BG_LIGHT_RED="${ESC}[101m"
+BG_LIGHT_GREEN="${ESC}[102m"
+BG_LIGHT_YELLOW="${ESC}[103m"
+BG_LIGHT_MAGENTA="${ESC}[105m"
+BG_LIGHT_CYAN="${ESC}[106m"
+
+# Shell Prompt
+
+USER_COLOR="\[${FG_GREEN}\]"
+USER_PROMPT="\[${FG_GREEN}\]?\[${NOCOLOR}\]>"
+USER_PROMPT_CONT="\[${FG_GREEN}\]??\[${NOCOLOR}\]>"
+if [[ ${EUID} == 0 ]]; then
+  USER_COLOR="\[${FG_RED}\]"
+  USER_PROMPT="\[${FG_RED}\]#\[${NOCOLOR}\]>"
+  USER_PROMPT_CONT="\[${FG_RED}\]##\[${NOCOLOR}\]>"
+fi
+
+export PS0="\n"
+export PS1="[ time:\[${FG_GREY}\]${TIME_24}\[${NOCOLOR}\] | user:\[${USER_COLOR}\]${USER_NAME}\[${NOCOLOR}\] | host:\[${FG_CYAN}\]${HOST_SHORT}\[${NOCOLOR}\] | pwd:\[${FG_YELLOW}\]${PWD_SHORT}\[${NOCOLOR}\] | git:\[${FG_MAGENTA}\]\$(__git_ps1 '%s' 2>/dev/null || true)\[${NOCOLOR}\] ]\n${USER_PROMPT} "
+export PS2="${USER_PROMPT_CONT} "

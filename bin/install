@@ -76,6 +76,39 @@ install_docker () {
   return 0
 }
 
+install_kubernetes () {
+  TMP="$(mktemp --directory)"
+  curl --silent \
+    --show-error \
+    --location \
+    --fail \
+    -o "${TMP}/helm" \
+    "https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3"
+  chmod 700 \
+    "${TMP}/helm"
+  exec "${TMP}/helm"
+  rm -rf "${TMP}"
+
+  TMP="$(mktemp --directory)"
+  LATEST="$(curl -L -s https://dl.k8s.io/release/stable.txt)"
+  curl -L \
+    -o "${TMP}/kubectl" \
+    "https://dl.k8s.io/release/${LATEST}/bin/linux/amd64/kubectl"
+  sudo install \
+    -o root \
+    -g root \
+    -m 0755 \
+    "${TMP}/kubectl" \
+    /usr/local/bin/kubectl
+  rm -rf "${TMP}"
+
+  return 0
+}
+
+install_c () {
+  return 0
+}
+
 install_golang () {
   # Setup root workspace
   #
@@ -112,35 +145,6 @@ install_golang () {
   [[ -d "${GOROOT}" ]] && sudo rm -rf "${GOROOT}"
   sudo tar -C /usr/local -xzf "${GO_INSTALL}"
   rm -rf "${TMP}"
-  return 0
-}
-
-install_kubernetes () {
-  TMP="$(mktemp --directory)"
-  curl --silent \
-    --show-error \
-    --location \
-    --fail \
-    -o "${TMP}/helm" \
-    "https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3"
-  chmod 700 \
-    "${TMP}/helm"
-  exec "${TMP}/helm"
-  rm -rf "${TMP}"
-
-  TMP="$(mktemp --directory)"
-  LATEST="$(curl -L -s https://dl.k8s.io/release/stable.txt)"
-  curl -L \
-    -o "${TMP}/kubectl" \
-    "https://dl.k8s.io/release/${LATEST}/bin/linux/amd64/kubectl"
-  sudo install \
-    -o root \
-    -g root \
-    -m 0755 \
-    "${TMP}/kubectl" \
-    /usr/local/bin/kubectl
-  rm -rf "${TMP}"
-
   return 0
 }
 

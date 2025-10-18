@@ -40,25 +40,22 @@ main () {
     esac
   done
 
-  DIRS=(
-    # personal user
-    "${HOME}/"
-    # root user
-    #"/root/"
-    # new users
-    #"/etc/skel"
-  )
+  mkdir -p "${HOME}/bin"
+  mkdir -p "${HOME}/.linuxctl"
 
-  # For each directory, copy the dotfiles into this destination
-  for DIR in "${DIRS[@]}"; do
-  cp --archive \
-    --recursive \
-    "${HOME}/code/github.com/mcgarebear/linux/dotfiles/." \
-    "${DIR}"
-  done
+  local -r config_dir=$(realpath "${__file_dir}/../config")
 
-  # .env is the entrypoint for shell customization.
-  source "${HOME}/.env"
+  cp --archive --recursive "${config_dir}/git/." "${HOME}"
+  cp --archive --recursive "${config_dir}/home/." "${HOME}"
+  cp --archive --recursive "${config_dir}/vim/." "${HOME}"
+
+    (
+      cat <<EOF
+[[ -f "\${HOME}/.env" ]] && source "\${HOME}/.env"
+EOF
+  ) >> "${HOME}/.bash_profile"
+
+  source "${HOME}/.bash_profile"
 
   return 0
 }
