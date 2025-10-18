@@ -11,6 +11,8 @@ main () {
   local -r __file_dir=$(dirname "${__file_path}")
   local -r __timestamp=$(date +"%Y%m%d-%H%M%S")
 
+  [[ -f "${HOME}/.bashrc" ]] && source "${HOME}/.bashrc"
+
   shopt -s autocd
   shopt -s cdspell
   shopt -s checkwinsize
@@ -24,13 +26,19 @@ main () {
   shopt -s histverify
 
   local -r config_dir=$(realpath "${__file_dir}/..")
+  if ! [[ -d "${config_dir}" ]]; then
+    return 0
+  fi
+
+  mkdir -p "${HOME}/bin"
+  mkdir -p "${HOME}/.linuxctl"
 
   dotfiles=(
     'home/.prompt'
     'home/.path'
   )
   for dotfile in ${dotfiles[@]}; do
-    local -r dotfile_path="${config_dir}/${dotfile}"
+    local dotfile_path="${config_dir}/${dotfile}"
     [[ -f "${dotfile_path}" ]] && source "${dotfile_path}"
   done
 }
