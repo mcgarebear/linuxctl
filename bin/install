@@ -216,7 +216,6 @@ main () {
 
   local cloud=0
   local container=0
-  local default=0
   local developer=0
   local misc=0
 
