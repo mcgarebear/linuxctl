@@ -10,20 +10,21 @@ set -o pipefail
 help () {
   local -r executable=${1}
   cat << EOF
-${executable} [flag..] [option [value]] subcommand
+${executable} [flag..] subcommand
 
 SYNOPSIS:
-  N/A"
+  linuxctl contains helper scripts for bootstrapping your shell.
 
 FLAGS:
- --flag
-   Defaults to \`false\`.
 -h, --help
     Display usage and exit.
 
-OPTIONS:"
-  --option
-    Defaults to \`value\`.
+SUBCOMMANDS:
+init
+install
+install-dev-packages
+install-vim-plugins
+update
 
 SUBCOMMANDS:
   N/A
@@ -53,7 +54,6 @@ __file_dir: ${__file_dir}
 __timestamp: ${__timestamp}
 EOF
 
-  local flag=0
   local option=''
   local subcommand=''
 
@@ -62,10 +62,6 @@ EOF
       -h | --help)
         help "${__file_name}"
         return 0
-        ;;
-      --flag)
-        flag=1
-        shift
         ;;
       --option)
         option="${2}"

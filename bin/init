@@ -16,7 +16,11 @@ SYNOPSIS:
 
 FLAGS:
 -h, --help
-    Display usage and exit.
+  Display usage and exit.
+
+OPTIONS:
+--shell
+  Path to shell. Defaults to \`${SHELL}\`.
 EOF
 }
 
@@ -28,19 +32,23 @@ main () {
   local -r __file_dir=$(dirname "${__file_path}")
   local -r __timestamp=$(date +"%Y%m%d-%H%M%S")
 
+  local shell="${SHELL}"
+
   while test $# -gt 0; do
     case "$1" in
       -h | --help)
         help "${__file_name}"
         return 0
         ;;
+      --shell)
+        shell="${2}"
+        shift 2
+        ;;
       *)
         break
         ;;
     esac
   done
-
-  [[ -f "${HOME}/.bashrc" ]] && source "${HOME}/.bashrc"
 
   shopt -s autocd
   shopt -s cdspell
@@ -55,7 +63,6 @@ main () {
   shopt -s histverify
 
   [[ -d "${HOME}/.linuxctl" ]] || mkdir -p "${HOME}/.linuxctl"
-
   [[ -d "${HOME}/bin" ]] || mkdir -p "${HOME}/bin"
   [[ -d "${HOME}/code" ]] || mkdir -p "${HOME}/code"
 
@@ -71,6 +78,8 @@ main () {
 
   [[ -f "${config_dir}/home/.path" ]] && source "${config_dir}/home/.path"
   [[ -f "${config_dir}/home/.prompt" ]] && source "${config_dir}/home/.prompt"
+
+  /usr/bin/env "${shell}"
 
   return 0
 }

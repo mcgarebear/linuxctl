@@ -50,7 +50,7 @@ install_gcloud () {
 }
 
 # -------------------------------------
-# Developer Tools
+# Container
 # -------------------------------------
 
 install_docker () {
@@ -76,7 +76,7 @@ install_docker () {
   return 0
 }
 
-install_kubernetes () {
+install_helm () {
   TMP="$(mktemp --directory)"
   curl --silent \
     --show-error \
@@ -88,7 +88,9 @@ install_kubernetes () {
     "${TMP}/helm"
   exec "${TMP}/helm"
   rm -rf "${TMP}"
+}
 
+install_kubectl () {
   TMP="$(mktemp --directory)"
   LATEST="$(curl -L -s https://dl.k8s.io/release/stable.txt)"
   curl -L \
@@ -101,6 +103,47 @@ install_kubernetes () {
     "${TMP}/kubectl" \
     /usr/local/bin/kubectl
   rm -rf "${TMP}"
+
+  return 0
+}
+
+# -------------------------------------
+# Developer
+# -------------------------------------
+install_vim () {
+  sudo apt-get install -y vim
+
+  # Create the vim package directory if it does not already exist
+  vimPackDir="${HOME}/.vim/pack"
+  [[ -d "${vimPackDir}" ]] \
+    || mkdir --parents "${vimPackDir}"
+
+  # Map with keys of strings representing the GITHUB SHORT NAME. Each
+  # key has a corresponding TAG string as value. Plugins are organized
+  # by TAGS, each will correspond to a subfolder in the package dir.
+  declare -A repos=(
+    ["fatih/vim-go"]="plugins"
+    ["tc50cal/vim-terminal"]="plugins"
+    ["preservim/nerdtree"]="plugins"
+    ["jiangmiao/auto-pairs"]="plugins"
+    ["preservim/nerdcommenter"]="plugins"
+    ["jvirtanen/vim-hcl"]="syntax"
+  )
+
+  # For each entry in the map, use the GITHUB SHORT NAME to build the clone
+  # URL. Use TAG and GITHUB SHORT NAME to construct plugin destination path.
+  for repo in ${!repos[@]}; do
+    githubURL="git@github.com:${repo}.git"
+    repoName=$( \
+      sed "s/.*\///g" \
+        <<< "${repo}" \
+    )
+    tag=${repos[$repo]}
+    repoDestination="${vimPackDir}/${tag}/start/${repoName}"
+
+    [[ -d "${repoDestination}" ]] \
+      || git clone "${githubURL}" "${repoDestination}"
+  done
 
   return 0
 }
@@ -171,17 +214,81 @@ main () {
   local -r __file_dir=$(dirname "${__file_path}")
   local -r __timestamp=$(date +"%Y%m%d-%H%M%S")
 
+  local cloud=0
+  local container=0
+  local default=0
+  local developer=0
+  local misc=0
+
   while test $# -gt 0; do
     case "$1" in
       -h | --help)
         help "${__file_name}"
         return 0
         ;;
+      --cloud)
+        cloud=1
+        shift 1
+        ;;
+      --container)
+        container=1
+        shift 1
+        ;;
+      --developer)
+        developer=1
+        shift 1
+        ;;
+      --misc)
+        misc=1
+        shift 1
+        ;;
       *)
-        break
+        echo "Error: Unrecognized input ${1}"
+        echo ""
+        help "${__file_name}"
+        return 1
         ;;
     esac
   done
+
+  if (( ${cloud} == 1 )); then
+    install_aws
+    install_azure
+    install_gcloud
+  fi
+
+  if (( ${container} == 1 )); then
+    install_docker
+    install_helm
+    install_kubectl
+  fi
+
+  if (( ${developer} == 1 )); then
+    install_c
+    install_golang
+    install_python
+    install_rust
+    install_vim
+
+    sudo apt-get install -y \
+      curl \
+      git \
+      jq \
+      tmux \
+      unzip \
+      wget \
+      yq
+
+  fi
+
+  if (( ${misc} == 1 )); then
+    sudo apt-get install -y \
+      bc \
+      htop \
+      neofetch \
+      scrot \
+      tree
+  fi
 
   return 0
 }
