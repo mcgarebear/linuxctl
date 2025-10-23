@@ -1,6 +1,4 @@
 #!/usr/bin/env bash
-#
-# TODO: Synopsis
 
 set -o errexit
 set -o nounset
@@ -23,12 +21,6 @@ SUBCOMMANDS:
   init
   install
   update
-
-ENVIRONMENT:
-  \${LINUXCTL_INSTALL_DIR}=${LINUXCTL_INSTALL_DIR}
-
-FILES:
-  N/A:
 EOF
 }
 
