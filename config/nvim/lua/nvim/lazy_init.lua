@@ -14,13 +14,15 @@ vim.opt.rtp:prepend(lazypath)
 require("lazy").setup({
   {
     "marko-cerovac/material.nvim",
-  },
+    opts = {
+    }
+  }, 
   {
-    "nvim-treesitter/nvim-treesitter",
-    branch = 'master',
-    lazy = false,
+    "nvim-treesitter/nvim-treesitter", 
+    branch = 'master', 
+    lazy = false, 
     build = ":TSUpdate"
-  },
+  }, 
   {
     "ibhagwan/fzf-lua",
     -- optional for icon support
@@ -28,5 +30,9 @@ require("lazy").setup({
     -- or if using mini.icons/mini.nvim
     dependencies = { "nvim-mini/mini.icons" },
     opts = {}
+  }, 
+  {
+    'nvim-telescope/telescope.nvim', tag = '0.1.8',
+    dependencies = { 'nvim-lua/plenary.nvim' }
   }
 })
