@@ -19,8 +19,6 @@ FLAGS:
     Display usage and exit.
 
 OPTIONS:
-  --config
-    Path to the config directory. Defaults to \`config\` where \`linuxctl\` is installed.
   --editor
     Path to the default editor. Defaults to \`\${EDITOR}\`.
   --home
@@ -43,7 +41,7 @@ main () {
   local -r __file_dir=$(dirname "${__file_path}")
 
   local config_dir=$(realpath "${__file_dir}/../config")
-  local editor="${EDITOR}"
+  local editor="${EDITOR:-bash}"
   local home="${HOME}"
   local shell="${SHELL}"
 
@@ -52,10 +50,6 @@ main () {
       -h | --help)
         help "${__file_name}"
         return 0
-        ;;
-      --config)
-        config="${2}"
-        shift 2
         ;;
       --editor)
         editor="${2}"
@@ -75,7 +69,7 @@ main () {
     esac
   done
 
-  export EDITOR="${editor}"
+  export EDITOR="test"
   export HOME="${home}"
   export SHELL="${shell}"
 
