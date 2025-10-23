@@ -1,56 +1,37 @@
-# linux
+# linuxctl
 
-This repository came about by setting up a
+This repository began as a repeatable way to setup a
 [raspberry pi 5](https://www.raspberrypi.com/products/raspberry-pi-5/)
 running
-[Ubuntu 23.10](https://ubuntu.com/download/desktop)
+[Ubuntu 24.04.03 LTS](https://ubuntu.com/download/raspberry-pi)
 for use as a local development environment.
 
-Imagine getting your hands on a new linux computer. What are you going to use
-it for? Probably developing software. This repository is meant to quickly
-bootstrap a development environment. Especially since my cheap SD cards tend
-to die.
+`linuxctl` bootstraps a shell environment for use as a local development
+environment.
 
 ## Install
 
-Clone the repository somewhere, I put things in `~/code` organized by
-VCS and slug.
+Clone the repository to the workstation:
 
 ```bash
-mkdir --parents "${HOME}/code/github.com/mcgarebear"
-git clone git@github.com/mcgarebear/linux.git "${HOME}/code/github.com/mcgarebear/linux"
+export LINUXCTL_INSTALL_DIR="${HOME}/code/github.com/mcgarebear"
+
+mkdir --parents "${LINUXCTL_INSTALL_DIR}"
+git clone git@github.com/mcgarebear/linuxctl.git "${LINUXCTL_INSTALL_DIR}/linuxctl"
+
+export PATH="${LINUXCTL_INSTALL_DIR}/linuxctl:${PATH}"
+export PATH="${LINUXCTL_INSTALL_DIR}/linuxctl/bin:${PATH}"
 ```
 
-Add the `/bin` directory of the repository to your `$PATH` to use the
-executable scripts.  For a fresh install, you will likely want to run these
-scripts.
+Begin shell, update installed packages:
 
 ```bash
-export PATH="${HOME}/code/github.com/mcgarebear/linux/bin:${PATH}"
-
-install-dotfiles
-install-dev-packages
-
-update-dev-packages
-update-sys-packages
+linuxctl init
+linuxctl update
 ```
 
-To make the prompt environment changes permenent, add them to your
-`${HOME}/.bashrc`.
+Install optional packages:
 
 ```bash
-cat <<EOF >> "${HOME}/.bashrc"
-
-# --------------------------------------
-# mcgarebear/linux.git
-# --------------------------------------
-export PATH="${HOME}/code/github.com/mcgarebear/linux/bin:${PATH}"
-[[ -f "${HOME}/.env" ]] && source "${HOME}/.env"
-# --------------------------------------
-
-EOF
+linuxctl install --all
 ```
-
-Should look something like this when done.
-
-![Linux](linux.png "Terminal")

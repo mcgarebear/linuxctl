@@ -240,6 +240,9 @@ install_rust () {
 # main is the entry point of the script. It returns zero upon successful
 # execution. If an error was encountered during execution, it returns non-zero.
 main () {
+  local -r __file_path=$(realpath $0)
+  local -r __file_name=$(basename "${__file_path}")
+
   local all=0
   local cloud=0
   local container=0
