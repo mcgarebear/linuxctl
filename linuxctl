@@ -22,12 +22,7 @@ FLAGS:
 SUBCOMMANDS:
 init
 install
-install-dev-packages
-install-vim-plugins
 update
-
-SUBCOMMANDS:
-  N/A
 
 ENVIRONMENT:
   N/A
@@ -100,7 +95,7 @@ EOF
     return 1
   fi
 
-  return 0
+  return "${__file_dir}/${subcommand}"
 }
 
 main $@

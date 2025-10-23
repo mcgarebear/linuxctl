@@ -26,15 +26,15 @@ EOF
 # -------------------------------------
 
 install_aws () {
-  TMP="$(mktemp --directory)"
-  curl -o "${TMP}/awscliv2.zip" \
+  local -r tmp="$(mktemp --directory)"
+  curl -o "${tmp}/awscliv2.zip" \
     "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip"
-  unzip "${TMP}/awscliv2.zip" -d "${TMP}"
-  sudo "${TMP}/aws/install" \
+  unzip "${tmp}/awscliv2.zip" -d "${tmp}"
+  sudo "${tmp}/aws/install" \
     --install-dir '/usr/local/aws-cli' \
     --bin-dir '/usr/local/bin' \
     --update
-  rm -rf "${TMP}"
+  rm -rf "${tmp}"
   return 0
 }
 
@@ -77,32 +77,32 @@ install_docker () {
 }
 
 install_helm () {
-  TMP="$(mktemp --directory)"
+  local -r tmp="$(mktemp --directory)"
   curl --silent \
     --show-error \
     --location \
     --fail \
-    -o "${TMP}/helm" \
+    -o "${tmp}/helm" \
     "https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3"
   chmod 700 \
-    "${TMP}/helm"
-  exec "${TMP}/helm"
-  rm -rf "${TMP}"
+    "${tmp}/helm"
+  exec "${tmp}/helm"
+  rm -rf "${tmp}"
 }
 
 install_kubectl () {
-  TMP="$(mktemp --directory)"
-  LATEST="$(curl -L -s https://dl.k8s.io/release/stable.txt)"
+  local -r tmp="$(mktemp --directory)"
+  local -r latest="$(curl -L -s https://dl.k8s.io/release/stable.txt)"
   curl -L \
-    -o "${TMP}/kubectl" \
-    "https://dl.k8s.io/release/${LATEST}/bin/linux/amd64/kubectl"
+    -o "${tmp}/kubectl" \
+    "https://dl.k8s.io/release/${latest}/bin/linux/amd64/kubectl"
   sudo install \
     -o root \
     -g root \
     -m 0755 \
-    "${TMP}/kubectl" \
+    "${tmp}/kubectl" \
     /usr/local/bin/kubectl
-  rm -rf "${TMP}"
+  rm -rf "${tmp}"
 
   return 0
 }
@@ -110,13 +110,22 @@ install_kubectl () {
 # -------------------------------------
 # Developer
 # -------------------------------------
+
 install_vim () {
+  local -r __file_path=$(realpath $0)
+  local -r __file_name=$(basename "${__file_path}")
+  local -r __file_dir=$(dirname "${__file_path}")
+
+  local -r config_dir=$(realpath "${__file_dir}/../config")
+  [[ -f ${HOME}/.vimrc ]] \
+    || cp --archive "${config_dir}/vim/.vimrc" "${HOME}"
+
   sudo apt-get install -y vim
 
   # Create the vim package directory if it does not already exist
-  vimPackDir="${HOME}/.vim/pack"
-  [[ -d "${vimPackDir}" ]] \
-    || mkdir --parents "${vimPackDir}"
+  local -r vim_pack_dir="${HOME}/.vim/pack"
+  [[ -d "${vim_pack_dir}" ]] \
+    || mkdir --parents "${vim_pack_dir}"
 
   # Map with keys of strings representing the GITHUB SHORT NAME. Each
   # key has a corresponding TAG string as value. Plugins are organized
@@ -139,7 +148,7 @@ install_vim () {
         <<< "${repo}" \
     )
     tag=${repos[$repo]}
-    repoDestination="${vimPackDir}/${tag}/start/${repoName}"
+    repoDestination="${vim_pack_dir}/${tag}/start/${repoName}"
 
     [[ -d "${repoDestination}" ]] \
       || git clone "${githubURL}" "${repoDestination}"
@@ -153,46 +162,57 @@ install_c () {
 }
 
 install_golang () {
+  local -r __architecture=$(dpkg --print-architecture)
+
+  # Root workspace for all Golang projects.
+  export GOPATH="${HOME}/go"
+  # Where to place `go install` binaries.
+  export GOBIN="${GOPATH}/bin"
+  # Location of Golang install.
+  export GOROOT="/usr/local/go"
+  # Add `go install` binaries as well as the go install itself.
+  export PATH="/usr/local/go/bin:${PATH}"
+  export PATH="${GOBIN}:${PATH}"
+
   # Setup root workspace
   #
   # bin: executables
   # pkg: compiled packages
   # src: source code
-  DIRS=(
+  local -r go_dirs=(
     "${GOPATH}"
     "${GOBIN}"
-    "${GOPATH}/src"
+    "${GOPATH}/bin"
     "${GOPATH}/pkg"
+    "${GOPATH}/src"
   )
-  for DIR in "${DIRS[@]}"; do
-    [[ -d "${DIR}" ]] \
-      || mkdir -p "${DIR}"
+  for dir in "${go_dirs[@]}"; do
+    [[ -d "${dir}" ]] \
+      || mkdir -p "${dir}"
   done
 
-  # Retrieve the version of go to install from their
-  # site
-  GO_VERSION="1.22.2"
-  GO_ARCH="arm64"
-  GO_TARGZ="go${GO_VERSION}.linux-${GO_ARCH}.tar.gz"
-  TMP="$(mktemp --directory)"
-  GO_INSTALL="${TMP}/${GO_TARGZ}"
-
-  # Download the install files if it doesn't already exist
-  [[ -f "${GO_INSTALL}" ]] || \
-    curl --location \
-    --output "${GO_INSTALL}" \
-    "https://go.dev/dl/${GO_TARGZ}"
+  # Retrieve the version of go to install from their site
+  local -r go_version="1.25.3"
+  local -r go_arch="${__architecture}"
+  local -r go_targz="go${go_version}.linux-${go_arch}.tar.gz"
+  local -r tmp="$(mktemp --directory)"
+  local -r go_install_out="${tmp}/${go_targz}"
+  curl --location \
+  --output "${go_install_out}" \
+  "https://go.dev/dl/${go_targz}"
 
   # Remove the current install and unpack the install
   # into GOROOT
   [[ -d "${GOROOT}" ]] && sudo rm -rf "${GOROOT}"
-  sudo tar -C /usr/local -xzf "${GO_INSTALL}"
-  rm -rf "${TMP}"
+  sudo tar -C /usr/local -xzf "${go_install_out}"
+  rm -rf "${tmp}"
+
   return 0
 }
 
 install_python () {
   sudo apt-get install -y python3 python3-pip
+
   return 0
 }
 
@@ -201,6 +221,7 @@ install_rust () {
     --tlsv1.2 \
     -sSf https://sh.rustup.rs \
   | sh
+
   return 0
 }
 
@@ -209,11 +230,7 @@ install_rust () {
 # main is the entry point of the script. It returns zero upon successful
 # execution. If an error was encountered during execution, it returns non-zero.
 main () {
-  local -r __file_path=$(realpath $0)
-  local -r __file_name=$(basename "${__file_path}")
-  local -r __file_dir=$(dirname "${__file_path}")
-  local -r __timestamp=$(date +"%Y%m%d-%H%M%S")
-
+  local all=0
   local cloud=0
   local container=0
   local developer=0
@@ -224,6 +241,10 @@ main () {
       -h | --help)
         help "${__file_name}"
         return 0
+        ;;
+      --all)
+        all=1
+        shift 1
         ;;
       --cloud)
         cloud=1
@@ -250,25 +271,19 @@ main () {
     esac
   done
 
-  if (( ${cloud} == 1 )); then
+  if (( ${all} == 1 || ${cloud} == 1 )); then
     install_aws
     install_azure
     install_gcloud
   fi
 
-  if (( ${container} == 1 )); then
+  if (( ${all} == 1 || ${container} == 1 )); then
     install_docker
     install_helm
     install_kubectl
   fi
 
-  if (( ${developer} == 1 )); then
-    install_c
-    install_golang
-    install_python
-    install_rust
-    install_vim
-
+  if (( ${all} == 1 || ${developer} == 1 )); then
     sudo apt-get install -y \
       curl \
       git \
@@ -278,9 +293,19 @@ main () {
       wget \
       yq
 
+    [[ -f "${HOME}/.gitconfig" ]] \
+      || cp --archive "${config_dir}/git/.gitconfig" "${home}"
+    [[ -f "${HOME}/.gitignore" ]] \
+      || cp --archive "${config_dir}/git/.gitignore" "${home}"
+
+    #install_c
+    install_golang
+    install_python
+    install_rust
+    install_vim
   fi
 
-  if (( ${misc} == 1 )); then
+  if (( ${all} == 1 || ${misc} == 1 )); then
     sudo apt-get install -y \
       bc \
       htop \

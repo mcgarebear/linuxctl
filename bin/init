@@ -19,8 +19,16 @@ FLAGS:
   Display usage and exit.
 
 OPTIONS:
+--config
+  Path to the config directory. Defaults to \`../config\`.
+--home
+  Path to the home directory. Defaults to \`\${HOME}\`.
 --shell
-  Path to shell. Defaults to \`${SHELL}\`.
+  Path to shell. Defaults to \`\${SHELL}\`.
+
+ENVIRONMENT:
+\`\${HOME}\`
+\`\${SHELL}\`
 EOF
 }
 
@@ -30,15 +38,24 @@ main () {
   local -r __file_path=$(realpath $0)
   local -r __file_name=$(basename "${__file_path}")
   local -r __file_dir=$(dirname "${__file_path}")
-  local -r __timestamp=$(date +"%Y%m%d-%H%M%S")
 
+  local home="${HOME}"
   local shell="${SHELL}"
+  local config_dir=$(realpath "${__file_dir}/../config")
 
   while test $# -gt 0; do
     case "$1" in
       -h | --help)
         help "${__file_name}"
         return 0
+        ;;
+      --config)
+        config="${2}"
+        shift 2
+        ;;
+      --home)
+        home="${2}"
+        shift 2
         ;;
       --shell)
         shell="${2}"
@@ -62,21 +79,16 @@ main () {
   shopt -s histreedit
   shopt -s histverify
 
-  [[ -d "${HOME}/.linuxctl" ]] || mkdir -p "${HOME}/.linuxctl"
-  [[ -d "${HOME}/bin" ]] || mkdir -p "${HOME}/bin"
-  [[ -d "${HOME}/code" ]] || mkdir -p "${HOME}/code"
+  [[ -d "${home}" ]] || mkdir -p "${home}"
+  [[ -d "${home}/.linuxctl" ]] || mkdir -p "${home}/.linuxctl"
+  [[ -d "${home}/bin" ]] || mkdir -p "${home}/bin"
+  [[ -d "${home}/code" ]] || mkdir -p "${home}/code"
 
-  local -r config_dir=$(realpath "${__file_dir}/../config")
-  if ! [[ -d "${config_dir}" ]]; then
-    return 0
-  fi
+  [[ -f "${home}/.inputrc" ]] \
+    || cp --archive "${config_dir}/home/.inputrc" "${home}"
 
-  cp --archive "${config_dir}/git/.gitconfig" "${HOME}"
-  cp --archive "${config_dir}/git/.gitignore" "${HOME}"
-  cp --archive "${config_dir}/home/.inputrc" "${HOME}"
-  cp --archive "${config_dir}/vim/.vimrc" "${HOME}"
+  export PATH="${HOME}/bin:${PATH}"
 
-  [[ -f "${config_dir}/home/.path" ]] && source "${config_dir}/home/.path"
   [[ -f "${config_dir}/home/.prompt" ]] && source "${config_dir}/home/.prompt"
 
   /usr/bin/env "${shell}"
