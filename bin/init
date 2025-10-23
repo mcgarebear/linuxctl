@@ -20,13 +20,16 @@ FLAGS:
 
 OPTIONS:
   --config
-    Path to the config directory. Defaults to \`../config\`.
+    Path to the config directory. Defaults to \`config\` where \`linuxctl\` is installed.
+  --editor
+    Path to the default editor. Defaults to \`\${EDITOR}\`.
   --home
     Path to the home directory. Defaults to \`\${HOME}\`.
   --shell
     Path to shell. Defaults to \`\${SHELL}\`.
 
 ENVIRONMENT:
+  \${EDITOR}=${EDITOR}
   \${HOME}=${HOME}
   \${SHELL}=${SHELL}
 EOF
@@ -39,9 +42,10 @@ main () {
   local -r __file_name=$(basename "${__file_path}")
   local -r __file_dir=$(dirname "${__file_path}")
 
+  local config_dir=$(realpath "${__file_dir}/../config")
+  local editor="${EDITOR}"
   local home="${HOME}"
   local shell="${SHELL}"
-  local config_dir=$(realpath "${__file_dir}/../config")
 
   while test $# -gt 0; do
     case "$1" in
@@ -51,6 +55,10 @@ main () {
         ;;
       --config)
         config="${2}"
+        shift 2
+        ;;
+      --editor)
+        editor="${2}"
         shift 2
         ;;
       --home)
@@ -66,6 +74,10 @@ main () {
         ;;
     esac
   done
+
+  export EDITOR="${editor}"
+  export HOME="${home}"
+  export SHELL="${shell}"
 
   shopt -s autocd
   shopt -s cdspell

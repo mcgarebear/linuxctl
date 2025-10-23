@@ -130,7 +130,7 @@ install_vim () {
   [[ -f ${HOME}/.vimrc ]] \
     || cp --archive "${config_dir}/vim/.vimrc" "${HOME}"
 
-  sudo apt-get install -y neovim vim
+  sudo apt-get install -y vim
 
   # Create the vim package directory if it does not already exist
   local -r vim_pack_dir="${HOME}/.vim/pack"
@@ -163,6 +163,23 @@ install_vim () {
     [[ -d "${repoDestination}" ]] \
       || git clone "${githubURL}" "${repoDestination}"
   done
+
+  return 0
+}
+
+install_neovim () {
+  local -r __file_path=$(realpath $0)
+  local -r __file_name=$(basename "${__file_path}")
+  local -r __file_dir=$(dirname "${__file_path}")
+
+  local -r config_dir=$(realpath "${__file_dir}/../config")
+
+  [[ -d ${HOME}/.config/nvim ]] \
+    || mkdir -p "${HOME}/.config/nvim"
+
+  cp --recursive --archive "${config_dir}/nvim/." "${HOME}/.config/nvim/"
+
+  sudo apt-get install -y neovim
 
   return 0
 }
@@ -320,6 +337,7 @@ main () {
     install_golang
     install_python
     install_rust
+    install_neovim
     install_vim
   fi
 
