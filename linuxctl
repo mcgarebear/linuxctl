@@ -68,7 +68,7 @@ main () {
     return 1
   fi
 
-  return "${__file_dir}/bin/${subcommand}"
+  exec "${__file_dir}/bin/${subcommand}"
 }
 
 main $@

@@ -41,7 +41,7 @@ main () {
   local -r __file_dir=$(dirname "${__file_path}")
 
   local config_dir=$(realpath "${__file_dir}/../config")
-  local editor="${EDITOR:-bash}"
+  local editor="${EDITOR:-nvim}"
   local home="${HOME}"
   local shell="${SHELL}"
 
