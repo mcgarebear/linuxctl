@@ -130,7 +130,7 @@ install_vim () {
   [[ -f ${HOME}/.vimrc ]] \
     || cp --archive "${config_dir}/vim/.vimrc" "${HOME}"
 
-  sudo apt-get install -y vim
+  sudo apt-get install -y neovim vim
 
   # Create the vim package directory if it does not already exist
   local -r vim_pack_dir="${HOME}/.vim/pack"
@@ -168,6 +168,7 @@ install_vim () {
 }
 
 install_c () {
+  sudo apt-get install -y build-essential
   return 0
 }
 
@@ -301,6 +302,7 @@ main () {
       curl \
       git \
       jq \
+      ripgrep \
       tmux \
       unzip \
       wget \
@@ -311,7 +313,7 @@ main () {
     [[ -f "${HOME}/.gitignore" ]] \
       || cp --archive "${config_dir}/git/.gitignore" "${home}"
 
-    #install_c
+    install_c
     install_golang
     install_python
     install_rust

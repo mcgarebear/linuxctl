@@ -54,22 +54,21 @@ main () {
     return 1
   fi
 
-  if ! [[ -f "${__file_dir}/${subcommand}" ]]; then
+  if ! [[ -f "${__file_dir}/bin/${subcommand}" ]]; then
     echo "Error: nonexistent subcommand"
     echo ""
     help "${__file_name}"
     return 1
   fi
 
-  # file exists matching subcommand, but it's not executable
-  if ! [[ -x "${__file_dir}/${subcommand}" ]]; then
+  if ! [[ -x "${__file_dir}/bin/${subcommand}" ]]; then
     echo "Error: nonexecutable subcommand"
     echo ""
     help "${__file_name}"
     return 1
   fi
 
-  return "${__file_dir}/${subcommand}"
+  return "${__file_dir}/bin/${subcommand}"
 }
 
 main $@
