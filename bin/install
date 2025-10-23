@@ -311,6 +311,7 @@ main () {
       htop \
       neofetch \
       scrot \
+      top \
       tree
   fi
 
