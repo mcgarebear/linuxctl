@@ -300,6 +300,7 @@ main () {
   if (( ${all} == 1 || ${developer} == 1 )); then
     sudo apt-get install -y \
       curl \
+      fzf \
       git \
       jq \
       ripgrep \
@@ -307,6 +308,8 @@ main () {
       unzip \
       wget \
       yq
+
+    bash -c "$(curl -sLo- https://superfile.dev/install.sh)"
 
     [[ -f "${HOME}/.gitconfig" ]] \
       || cp --archive "${config_dir}/git/.gitconfig" "${home}"

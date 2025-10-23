@@ -80,7 +80,8 @@ main () {
   shopt -s histverify
 
   [[ -d "${home}" ]] || mkdir -p "${home}"
-  [[ -d "${home}/.linuxctl" ]] || mkdir -p "${home}/.linuxctl"
+  [[ -d "${home}/.config" ]] || mkdir -p "${home}/.config"
+  [[ -d "${home}/.config/linuxctl" ]] || mkdir -p "${home}/.config/linuxctl"
   [[ -d "${home}/bin" ]] || mkdir -p "${home}/bin"
   [[ -d "${home}/code" ]] || mkdir -p "${home}/code"
 
