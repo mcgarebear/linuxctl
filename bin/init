@@ -15,20 +15,20 @@ SYNOPSIS:
   prompt for the system.
 
 FLAGS:
--h, --help
-  Display usage and exit.
+  -h, --help
+    Display usage and exit.
 
 OPTIONS:
---config
-  Path to the config directory. Defaults to \`../config\`.
---home
-  Path to the home directory. Defaults to \`\${HOME}\`.
---shell
-  Path to shell. Defaults to \`\${SHELL}\`.
+  --config
+    Path to the config directory. Defaults to \`../config\`.
+  --home
+    Path to the home directory. Defaults to \`\${HOME}\`.
+  --shell
+    Path to shell. Defaults to \`\${SHELL}\`.
 
 ENVIRONMENT:
-\`\${HOME}\`
-\`\${SHELL}\`
+  \${HOME}=${HOME}
+  \${SHELL}=${SHELL}
 EOF
 }
 
