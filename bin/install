@@ -16,8 +16,18 @@ SYNOPSIS:
 
 
 FLAGS:
--h, --help
+  --all
+    Installs all package type.
+  --cloud
+    Installs cloud provider packages.
+  --container
+    Installs container and container orchestration packages.
+  --developer
+    Installs developer packages.
+  -h, --help
     Display usage and exit.
+  --misc
+    Install miscellaneous packages.
 EOF
 }
 
