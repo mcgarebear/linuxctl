@@ -4,6 +4,18 @@ set -o errexit
 set -o nounset
 set -o pipefail
 
+shopt -s autocd
+shopt -s cdspell
+shopt -s checkwinsize
+shopt -s direxpand
+shopt -s dirspell
+shopt -s extglob
+shopt -s failglob
+shopt -s globstar
+shopt -s histappend
+shopt -s histreedit
+shopt -s histverify
+
 # help writes usage information to the console.
 help () {
   local -r executable=${1}
@@ -90,11 +102,18 @@ main () {
   [[ -d "${home}/.config/linuxctl" ]] || mkdir -p "${home}/.config/linuxctl"
   [[ -d "${home}/bin" ]] || mkdir -p "${home}/bin"
   [[ -d "${home}/code" ]] || mkdir -p "${home}/code"
+  [[ -d "${HOME}/.linuxctl" ]] || mkdir -p "${HOME}/.linuxctl"
 
   [[ -f "${home}/.inputrc" ]] \
     || cp --archive "${config_dir}/home/.inputrc" "${home}"
 
   export PATH="${HOME}/bin:${PATH}"
+
+  local -r config_dir=$(realpath "${__file_dir}/../config")
+  if ! [[ -d "${config_dir}" ]]; then
+    echo "${config_dir} does not exist or is not a directory"
+    return 0
+  fi
 
   [[ -f "${config_dir}/home/.prompt" ]] && source "${config_dir}/home/.prompt"
 
