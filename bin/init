@@ -115,10 +115,6 @@ main () {
     return 0
   fi
 
-  [[ -f "${config_dir}/home/.prompt" ]] && source "${config_dir}/home/.prompt"
-
-  /usr/bin/env "${shell}"
-
   return 0
 }
 
